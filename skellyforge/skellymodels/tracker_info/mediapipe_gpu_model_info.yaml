@@ -1,15 +1,12 @@
 ---
-name: mediapipe_gpu
-tracker_name: MediaPipeGPUTracker
+name: mediapipe
+tracker_name: MediapipeHolisticTracker
 
 #=================================
 # Aspect Order
 #=================================     
 order: 
   - body
-  - right_hand
-  - left_hand
-  - face
 
 aspects:
   #=================================
@@ -255,90 +252,6 @@ aspects:
       right_ankle:
         - right_heel
         - right_foot_index
-
-  #=================================
-  # Right Hand Aspect Configuration
-  #=================================  
-  right_hand:
-    tracked_points:
-      type: list
-      names:
-        - wrist
-        - thumb_cmc
-        - thumb_mcp
-        - thumb_ip
-        - thumb_tip
-        - index_finger_mcp
-        - index_finger_pip
-        - index_finger_dip
-        - index_finger_tip
-        - middle_finger_mcp
-        - middle_finger_pip
-        - middle_finger_dip
-        - middle_finger_tip
-        - ring_finger_mcp
-        - ring_finger_pip
-        - ring_finger_dip
-        - ring_finger_tip
-        - pinky_mcp
-        - pinky_pip
-        - pinky_dip
-        - pinky_tip 
-
-    virtual_marker_definitions: null
-    segment_connections: null
-    center_of_mass_definitions: null
-    joint_hierarchy: null
-  
-  #=================================
-  # Left Hand Aspect Configuration
-  #=================================  
-  left_hand:
-    tracked_points:
-      type: list
-      names:
-        - wrist
-        - thumb_cmc
-        - thumb_mcp
-        - thumb_ip
-        - thumb_tip
-        - index_finger_mcp
-        - index_finger_pip
-        - index_finger_dip
-        - index_finger_tip
-        - middle_finger_mcp
-        - middle_finger_pip
-        - middle_finger_dip
-        - middle_finger_tip
-        - ring_finger_mcp
-        - ring_finger_pip
-        - ring_finger_dip
-        - ring_finger_tip
-        - pinky_mcp
-        - pinky_pip
-        - pinky_dip
-        - pinky_tip 
-
-    virtual_marker_definitions: null
-    segment_connections: null
-    center_of_mass_definitions: null
-    joint_hierarchy: null
-
-  #=================================
-  # Face Aspect Configuration
-  #=================================  
-  face:
-    tracked_points:
-      type: generated
-      names: 
-        convention: face_{:04d}
-        count: 478
-
-    virtual_marker_definitions: null
-    segment_connections: null
-    center_of_mass_definitions: null
-    joint_hierarchy: null
-
 
     
 

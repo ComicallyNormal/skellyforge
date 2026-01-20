@@ -11,9 +11,12 @@ class HumanAspectNames(Enum):
     LEFT_HAND = "left_hand"
     RIGHT_HAND = "right_hand"
 
+
 HUMAN_ENUMS = (HumanAspectNames.FACE,
                 HumanAspectNames.LEFT_HAND,
                 HumanAspectNames.RIGHT_HAND)
+
+HUMAN_BASIC_ENUMS =(HumanAspectNames.BODY,) #HACK
 
 logger = logging.getLogger(__name__)
 
@@ -48,12 +51,13 @@ class Human(Animal):
         self._initialize_aspects()
 
     def _initialize_aspects(self):
+        print("initialize aspects hit")
         """
         Initializes the anatomical aspects defined in `HUMAN_ENUMS`,
         adding them if they exist in the current `aspect_order`.
         """
 
-        for aspect_enum in HUMAN_ENUMS:
+        for aspect_enum in HUMAN_BASIC_ENUMS:
             if aspect_enum.value in self.aspect_order:
                 self.aspect_from_model_info(
                     name = aspect_enum.value
@@ -109,8 +113,8 @@ class Human(Animal):
 
         super().add_tracked_points_numpy(tracked_points_numpy_array)
 
-        for aspect_enum in HUMAN_ENUMS:
-            
+        for aspect_enum in HUMAN_BASIC_ENUMS:
+            print("aspect: ", aspect_enum)
             aspect = self.aspects.get(aspect_enum.value)
             if aspect_enum.value in self.tracked_point_slices and aspect:
                 aspect.add_tracked_points(
@@ -131,7 +135,7 @@ class Human(Animal):
         """
         super().add_reprojection_error_numpy(reprojection_error_data)
 
-        for aspect_enum in HUMAN_ENUMS:
+        for aspect_enum in HUMAN_BASIC_ENUMS:
             aspect = self.aspects.get(aspect_enum.value)
             if aspect_enum.value in self.tracked_point_slices and aspect:
                 aspect.add_reprojection_error(

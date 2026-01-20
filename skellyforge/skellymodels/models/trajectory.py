@@ -62,6 +62,7 @@ class Trajectory(BaseModel):
         landmark_names = anatomical_structure.tracked_point_names.copy()
         vm_defs = anatomical_structure.virtual_markers_definitions
         
+        # print("tracked points pre list: ",output_array_as_list)
         output_array_as_list: list[np.ndarray] = [tracked_points_array]
         #compute virtual markers
         if vm_defs:
@@ -77,8 +78,10 @@ class Trajectory(BaseModel):
                 output_array_as_list.append(virtual_marker[:, None, :])
                 landmark_names.append(vm_name) 
 
+        # print("passed in tracked points array: ",tracked_points_array)
         output_array = np.concatenate(output_array_as_list, axis=1) if len(output_array_as_list) > 1 else tracked_points_array
-    
+        # print("output_array calculated: ",tracked_points_array)
+
         return cls(name = name, 
                    array = output_array,
                    landmark_names = landmark_names)

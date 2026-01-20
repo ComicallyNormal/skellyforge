@@ -141,6 +141,7 @@ class Actor(ABC):
         """
         Add an Aspect instance to the actor 
         """
+        logger.info(f"adding aspect: point length: {len(aspect.anatomical_structure.tracked_point_names)}")
         self.aspects[aspect.name] = aspect
         
     def aspect_from_model_info(self, name:str) -> None:
@@ -236,6 +237,22 @@ class Actor(ABC):
                         trajectory.as_array) 
                 logger.info(f"Saved out {save_path}")
 
+
+    def save_out_numpy_data(self, path_to_output_folder: Path|str|None = None):
+        """
+        Saves out a .npy file for each Trajectory in each Aspect with format {tracker_type}_{aspect}_{trajectory} 
+        (i.e. 'mediapipe_body_3d_xyz')
+        """
+        path_to_output_folder = self._set_output_folder(path_to_output_folder)
+
+        for aspect in self.aspects.values():
+            for trajectory in aspect.trajectories.values():
+                save_path = path_to_output_folder / f"{aspect.metadata['tracker_type']}_{aspect.name}_UITEST_{trajectory.name}.npy"
+                np.save(save_path,
+                        trajectory.as_array) 
+                logger.info(f"Saved out {save_path}")
+
+
     def save_out_csv_data(self, path_to_output_folder: Path|str|None = None):
         """
         Saves out a .csv file for each Trajectory in each Aspect with format {tracker_type}_{aspect}_{trajectory} 
@@ -276,8 +293,12 @@ class Actor(ABC):
         Saves out a single .npy file with all xyz trajectories from all aspects
         """
         path_to_output_folder = self._set_output_folder(path_to_output_folder)
-
+        print("save_out_all_xyz_numpy_data aspect order")
+        print(self.aspect_order)
         all_xyz_data = np.concatenate([self.aspects[aspect_name].xyz.as_array for aspect_name in self.aspect_order], axis = 1)
+        #todo:restrict by aspect name
+        print("save_out_all_xyz_numpy_data aspects:",self.aspects)
+
 
         save_path = path_to_output_folder/f"{self.tracker}_skeleton_3d.npy"
         np.save(save_path, all_xyz_data)
@@ -295,7 +316,7 @@ class Actor(ABC):
         for model_name, aspect_data in dataframe.groupby('model'): #model name is formatted {tracker}.{aspect_name} in our CSV/parquet
             if model_name not in expected_models:
                 raise ValueError(f"Aspect {model_name} not found in aspects initialized in Actor: {expected_models}")
-            
+            print("populate_aspects_from_parquet, model name: ",model_name)
             tracker_name, aspect_name = model_name.split(".")
             trajectory_dict: dict[str, Trajectory] = {}
 

@@ -2,6 +2,7 @@ from pathlib import Path
 
 import numpy as np
 from pydantic import BaseModel, ConfigDict
+import json 
 
 class Point3d(BaseModel):
     x: float
@@ -26,6 +27,32 @@ class Observation3d(BaseModel):
                                    y=float(self.triangulated_data[i,1]),
                                    z=float(self.triangulated_data[i,2]),)
         return points
+    
+    def to_json(self)->str:
+        points :list[Point3d]= {}
+        json_points  : list[dict] = []
+        for i, name in enumerate(self.names):
+            if np.any(np.isnan(self.triangulated_data[i])):
+                continue
+            points[name] = Point3d(x=float(self.triangulated_data[i,0]),
+                                   y=float(self.triangulated_data[i,1]),
+                                   z=float(self.triangulated_data[i,2]),)
+            json_point :dict[str,float]= {"x":points[name].x,"y":points[name].y,"z":points[name].z}
+            json_points.append(json_point)
+
+        return json.dumps(json_points, separators=(",", ":"))
+            
+            
+    def to_point_list(self)->list[Point3d]:
+        points = []
+        for i, name in enumerate(self.names):
+            if np.any(np.isnan(self.triangulated_data[i])):
+                continue
+            new_point = Point3d(x=float(self.triangulated_data[i,0]),
+                                   y=float(self.triangulated_data[i,1]),
+                                   z=float(self.triangulated_data[i,2]),)
+            points.append(new_point)
+        return points     
 
 
 class Trajectory3d(BaseModel):

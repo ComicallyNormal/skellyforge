@@ -20,6 +20,7 @@ class ModelInfo(BaseModel):
 
     @classmethod
     def from_config_path(cls, config_path: Path|str):
+        print("from_config_path_hit, path was: ",config_path)
         """
         Create a ModelInfo instance from a configuration file path.
         """
@@ -39,6 +40,7 @@ class ModelInfo(BaseModel):
 
     @classmethod
     def from_model_dict(cls, model_dict: dict):
+        print("from_model_dict_hit")
         """
         Create a ModelInfo instance from a dictionary with the required data (which is saved into the Parquet file)
         """
@@ -99,12 +101,18 @@ class ModelInfo(BaseModel):
                 slices[aspect] = slice(current_marker, current_marker + num_landmarks)
                 current_marker += num_landmarks
             except KeyError:
-                raise KeyError(f"Aspect '{aspect}' is included in the aspect order of the YAML, but no configuration was found for it. Available aspects: {list(aspects.keys())}")
+                raise KeyError(f"Aspect '{aspect}' is included in the aspect order of the YAML, but no configuration was found for it. Available aspects: {list(self.aspects.keys())}")
         return slices
 
 
 def MediapipeModelInfo():
+    print("mediapipe model info() hit")
     return ModelInfo.from_config_path(config_path = Path(__file__).parents[1]/'tracker_info'/'mediapipe_model_info.yaml')
+
+
+def MediapipeGPUModelInfo():
+    print("mediapipe gpu model info() hit")
+    return ModelInfo.from_config_path(config_path = Path(__file__).parents[1]/'tracker_info'/'mediapipe_gpu_model_info.yaml')
 
 def RTMPoseModelInfo():
     return ModelInfo.from_config_path(config_path = Path(__file__).parents[1]/'tracker_info'/'rtmpose_model_info.yaml')
